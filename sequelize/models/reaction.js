@@ -1,0 +1,35 @@
+'use strict';
+const { post } = require('request');
+const {  Model} = require('sequelize');
+module.exports = (sequelize, DataTypes) => { 
+   class reaction extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate({post}) {
+    // define association here
+    this.belongsTo(post)
+        }
+    toJSON(){ 
+      return { ...this.get(), reaction_ID: undefined }
+    
+    }   
+  };
+  reaction.init({ 
+      Reaction_ID:{type:DataTypes.INTEGER,
+      allowNull:false,
+      unique:true,
+      primaryKey:true,
+    },
+    reaction_type:{type:DataTypes.STRING,
+      allowNull:false,
+    },
+  }, {
+    sequelize,
+    tableName:'reaction',
+    modelName: 'reaction',
+  });
+  return reaction;
+};
