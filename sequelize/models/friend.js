@@ -11,8 +11,7 @@ module.exports = (sequelize, DataTypes) => {
        // define association here
       //this.belongsToMany(user, {through: friend})
       //this.belongsToMany(friend, {through: friend})
-      
-       this.belongsToMany(user, {through: friend})
+      // this.belongsToMany(user, {through: friend})
         
      
        
@@ -20,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       
     }
     toJSON(){ 
-      return { ...this.get(), Friend_ID: undefined ,User_ID: undefined}
+      return { ...this.get(), Friend_ID: undefined }
     
     } 
   };
@@ -30,6 +29,8 @@ module.exports = (sequelize, DataTypes) => {
       unique:true,
       primaryKey:true,
     },
+    
+  
     status: {type:DataTypes.STRING,
       allowNull:false,
     },

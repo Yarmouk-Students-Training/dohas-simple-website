@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       Reaction_ID:{type:DataTypes.INTEGER,
       allowNull:false,
       unique:true,
+      primaryKey:true,
     },
     reaction_type:{type:DataTypes.STRING,
       allowNull:false,

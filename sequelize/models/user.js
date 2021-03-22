@@ -11,31 +11,42 @@ module.exports = (sequelize, DataTypes) => {
     static associate({post,  friend,user}) {
       // define association here
       this.hasMany(post)
-      friend.belongsToMany(this, {through: friend})
+      this.belongsToMany(this, {through: friend , as : 'User' , foreignKey:'Friend'  })
          }
     toJSON(){ 
-      return { ...this.get(), User_ID: undefined ,Friend_ID: undefined }
+      return { ...this.get(), User_ID: undefined  }
     
     }
   };
  
-  user.init({ User_ID:{type:DataTypes.INTEGER,
+  user.init(
+    { User_ID:{
+    type:DataTypes.INTEGER,
     allowNull:false,
     unique:true,
+    primaryKey:true,
   },
 
     email  : {type:DataTypes.STRING,
       allowNull:false,
-      unique: true
+      unique: true,
+      validate:{
+        isEmail:true ,
+        notEmpty:true,
+
+      }
+
     },
     gender : {type:DataTypes.STRING,
       allowNull:true,
     },
     user_name : {type:DataTypes.STRING,
       allowNull:false,
+      unique:true,
     },
     password :{type:DataTypes.INTEGER,
       allowNull:false,
+
     },
   }, 
   {

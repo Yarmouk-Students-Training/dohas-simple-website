@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey:true,
     },
     comment_content: {type:DataTypes.STRING,
-      allowNull:false,
+      allowNull:false, 
   }, 
 },
     {
