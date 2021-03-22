@@ -9,8 +9,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({user}) {
        // define association here
-      this.belongsToMany(user, {through: friend})
+      //this.belongsToMany(user, {through: friend})
       //this.belongsToMany(friend, {through: friend})
+      
+       this.belongsToMany(user, {through: friend})
+        
+     
        
      
       
