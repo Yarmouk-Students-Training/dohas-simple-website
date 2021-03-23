@@ -8,15 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate({user}) {
-       // define association here
-      //this.belongsToMany(user, {through: friend})
-      //this.belongsToMany(friend, {through: friend})
-      // this.belongsToMany(user, {through: friend})
-        
-     
-       
-     
-      
+       // define association here    
     }
     toJSON(){ 
       return { ...this.get(), Friend_ID: undefined }
