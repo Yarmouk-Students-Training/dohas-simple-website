@@ -1,5 +1,6 @@
 'use strict';
 const { post } = require('request');
+const { comment } = require('request');
 const {  Model} = require('sequelize');
 module.exports = (sequelize, DataTypes) => { 
    class reaction extends Model {
@@ -8,10 +9,13 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({post , comment}) {
+    static associate({post ,user}) {
     // define association here
     this.belongsTo(post)
-    this.belongsToMany(comment, { through: 'useract' })
+    this.belongsTo(user)
+    
+    
+    
         }
     toJSON(){ 
       return { ...this.get(), reaction_ID: undefined }

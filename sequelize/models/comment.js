@@ -8,19 +8,19 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ post,reaction  }) {
+    static associate({ post,user }) {
       // define association here
       this.belongsTo(post)
-      this.belongsToMany(reaction, { through: 'useract' })
-      
+      this.belongsTo(user)
+                
     }
     toJSON(){ 
-      return { ...this.get(), C_ID: undefined}
+      return { ...this.get(), comment_ID: undefined}
     
     } 
   };
   comment.init({
-    Comment_ID: {type:DataTypes.INTEGER,
+    comment_ID: {type:DataTypes.INTEGER,
       allowNull:false,
       unique:true,
       primaryKey:true,
