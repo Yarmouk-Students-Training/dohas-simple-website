@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     }   
   };
   reaction.init({ 
-      Reaction_ID:{type:DataTypes.INTEGER,
+      reaction_ID:{type:DataTypes.INTEGER,
       allowNull:false,
       unique:true,
       primaryKey:true,

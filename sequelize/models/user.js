@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({post,  friend,user, comment,reaction}) {
+    static associate({post,  friend, comment,reaction}) {
       // define association here
       this.hasMany(post)
       this.belongsToMany(this, {through: friend , as : 'User' , foreignKey:'Friend'  })
@@ -24,11 +24,11 @@ module.exports = (sequelize, DataTypes) => {
  
   user.init(
     { User_ID:{
-    type:DataTypes.INTEGER,
-    allowNull:false,
-    unique:true,
-    primaryKey:true,
-  },
+      type:DataTypes.INTEGER,
+      allowNull:false,
+      unique:true,
+      primaryKey:true,
+    },
 
     email  : {type:DataTypes.STRING,
       allowNull:false,
@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
 
     },
     gender : {type:DataTypes.STRING,
-      allowNull:true,
+      allowNull:false,
     },
     user_name : {type:DataTypes.STRING,
       allowNull:false,
@@ -49,6 +49,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     password :{type:DataTypes.INTEGER,
       allowNull:false,
+      validate: {
+        len: [8, 15]
+      }
 
     },
   }, 
