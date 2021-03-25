@@ -1,33 +1,30 @@
-
 const express = require('express')
 const { contant } = require('lodash')
-const { post } = require('request')
-const { sequelize } = require('./models')
-const friend = require('./models/friend')
-const {reaction } = require('./models/reaction')
+const { posts , comment , friend , user ,reaction , sequelize } = require('./models')
 const route = express()
-//route.use(express.json())
+route.use(express.json())
 
 route.post('/user', async (req, res) => {
-    const { user_name, email, user_ID ,gender ,passwoed  } = req.body
+    const  { user_name , email, user_ID ,gender ,password}=req.body
   
     try {
-      const user = await User.create({user_name, email, user_ID ,gender ,passwoed   })
-  
-      return res.json(user)
-    } catch (err) {
-      console.log(err)
-      return res.status(500).json(err)
+      console.log("hi user")
+      const User = await user.create({user_name , email, User_ID: user_ID ,gender ,password })
+      return res.json(User)
+    } 
+    catch (err) {
+    console.log(err)
+    return res.status(500).json(err)
     }
   })
 
-  route.post('/post', async (req, res) => {
-    const {  user_ID,content , post_ID   } = req.body
+  route.post('/posts', async (req, res) => {
+    const { user_ID , content , posts_ID } = req.body
   
     try {
-      const post = await post.create({  user_ID , content , post_ID})
-  
-      return res.json(user)
+       console.log("hi posts", user_ID)
+      const post = await posts.create({content , posts_ID , userId:user_ID})
+      return res.json(post)
     } catch (err) {
       console.log(err)
       return res.status(500).json(err)
@@ -36,40 +33,43 @@ route.post('/user', async (req, res) => {
 
 
   route.post('/comment', async (req, res) => {
-    const {  comment_content , post_ID  , comment_ID ,user_ID  } = req.body
-  
+    const {  comment_content , post_ID  , comment_ID , user_ID  } = req.body
+
     try {
-      const comment = await comment.create({post_ID, comment_content ,  comment_ID   })
-  
-      return res.json(user)
-    } catch (err) {
+      const comments = await comment.create({comment_content , post_ID  , comment_ID , userId:user_ID })
+      return res.json(comments)
+    }
+     catch (err)
+     {
       console.log(err)
-      return res.status(500).json(err) }
+      return res.status(500).json(err) 
+    }
     }) 
  
   
-  route.post('/reaction ', async (req, res) => {
-    const {  reaction_type , post_ID  , reaction_ID ,user_ID  } = req.body
+  route.post('/reaction', async (req, res) => {
+    const {  reaction_type , posts_ID  , reaction_ID ,userId:user_ID  } = req.body
   
     try {
-      const reaction = await reaction.create({ reaction_type , post_ID  , reaction_ID   })
-  
-      return res.json(user)
-    } catch (err) {
+      const Reaction = await reaction.create({reaction_type , posts_ID , reaction_ID , userId:user_ID})
+      return res.json(Reaction)
+      } 
+      catch (err) {
       console.log(err)
       return res.status(500).json(err)
     }
   })
   route.post('/friend', async (req, res) => {
-    const { user_ID ,friend_ID ,status , action_user_id } = req.body
+    const { User_ID:User  , Friend_ID , status }=req.body
   
     try {
-      const user = await User.create({user_ID ,friend_ID ,status , action_user_id  })
-  
-      return res.json(user)
-    } catch (err) {
-      console.log(err)
-      return res.status(500).json(err)
+      console.log("friend",Friend_ID, User)
+      const Friend = await friend.create({User , Friend_ID , status })
+      return res.json(Friend)
+    }
+     catch (err) {
+     console.log(err)
+     return res.status(500).json(err)
     }
   })
 
@@ -77,9 +77,9 @@ route.post('/user', async (req, res) => {
 route.get('/user', async (req, res) => {
     try { 
         console.log("hi")
-      const users = await User.findAll()
+      const User = await user.findAll()
   
-      return res.json(users)
+      return res.json(User)
     } catch (err) {
       console.log(err)
       return res.status(500).json({ error: 'Something went wrong' })
@@ -89,11 +89,11 @@ route.get('/user', async (req, res) => {
   route.get('/user/:user_ID', async (req, res) => {
     const user_ID = req.params.user_ID
     try {
-      const user = await User.findOne({   where: { user_ID },
+      const User = await user.findOne({   where: { User_ID: user_ID },
         include: 'posts',
       })
   
-      return res.json(user)
+      return res.json(User)
     } catch (err) {
       console.log(err)
       return res.status(500).json({ error: 'Something went wrong' })
@@ -102,25 +102,25 @@ route.get('/user', async (req, res) => {
   
   
  
-  route.get('/post', async (req, res) => {
+  route.get('/posts', async (req, res) => {
     try {
-      const post = await post.findAll()
+      const post = await posts.findAll()
   
-      return res.json(users)
+      return res.json(post)
     } catch (err) {
       console.log(err)
       return res.status(500).json({ error: 'Something went wrong' })
     }
   })
   
-  route.get('/post/:post_ID', async (req, res) => {
-    const post_ID = req.params.post_ID
+  route.get('/posts/:posts_ID', async (req, res) => {
+    const posts_ID = req.params.posts_ID
     try {
-      const post = await post.findOne({where: { post_ID },
-        include: 'posts',
+      const post = await posts.findOne({where: { posts_ID },
+        include: 'user',
       })
   
-      return res.json(user)
+      return res.json(post)
     } catch (err) {
       console.log(err)
       return res.status(500).json({ error: 'Something went wrong' })
@@ -129,9 +129,9 @@ route.get('/user', async (req, res) => {
 
   route.get('/comment', async (req, res) => {
     try {
-      const comment = await comment.findAll()
+      const comments = await comment.findAll()
   
-      return res.json(users)
+      return res.json(comments)
     } catch (err) {
       console.log(err)
       return res.status(500).json({ error: 'Something went wrong' })
@@ -141,11 +141,11 @@ route.get('/user', async (req, res) => {
   route.get('/comment/:comment_ID', async (req, res) => {
     const comment_ID = req.params.comment_ID
     try {
-      const comment = await comment.findOne({ where: { comment_ID },
+      const comments = await comment.findOne({ where: { comment_ID },
         include: 'posts',
       })
   
-      return res.json(user)
+      return res.json(comments)
     } catch (err) {
       console.log(err)
       return res.status(500).json({ error: 'Something went wrong' })
@@ -154,9 +154,9 @@ route.get('/user', async (req, res) => {
 
   route.get('/reaction', async (req, res) => {
     try {
-      const reaction = await reaction.findAll()
+      const Reaction = await reaction.findAll()
   
-      return res.json(users)
+      return res.json(Reaction)
     } catch (err) {
       console.log(err)
       return res.status(500).json({ error: 'Something went wrong' })
@@ -166,13 +166,12 @@ route.get('/user', async (req, res) => {
   route.get('/reaction/:reaction_ID', async (req, res) => {
     const reaction_ID = req.params.reaction_ID
     try {
-      const reaction = await reaction.findOne({
-        where: { reaction_ID },
-        include: 'posts',
+      const Reaction = await reaction.findOne({where: { reaction_ID },
+        //include: 'posts',
       })
   
-      return res.json(user)
-    } catch (err) {
+      return res.json(Reaction)
+    } catch (err){
       console.log(err)
       return res.status(500).json({ error: 'Something went wrong' })
     }
@@ -180,40 +179,39 @@ route.get('/user', async (req, res) => {
 
   route.get('/friend', async (req, res) => {
     try {
-      const friend = await friend.findAll()
+      const Friend = await friend.findAll()
   
-      return res.json(users)
+      return res.json(Friend)
     } catch (err) {
       console.log(err)
       return res.status(500).json({ error: 'Something went wrong' })
     }
   })
   route.get('/friend/:friend_ID', async (req, res) => {
-    const friend_ID = req.params.friend_ID
+    const Friend_ID = req.params.Friend_ID
     try {
-      const friend = await friend.findOne({ where: { friend_ID },
+      const Friend = await friend.findOne({ where: { Friend_ID },
         include: 'posts',
       })
   
-      return res.json(user)
+      return res.json(Friend)
     } catch (err) {
       console.log(err)
       return res.status(500).json({ error: 'Something went wrong' })
     }
   })
 
-  route.put('/user/:user_ID', async (req, res) => {
+  route.put('/user', async (req, res) => {
     const {user_name, email, user_ID ,gender ,password  } = req.body
     try {
-      const user = await User.findOne({ where: { user_ID } })
+      const User = await user.findOne({ where: { User_ID:user_ID } })
   
-    user.user_name = name_name 
-    user.email = email
-    user.user_ID = id 
-    user.gender = gender
-    user.password =password
+      User.user_name = user_name 
+      User.email = email
+      User.gender = gender
+      User.password =password
   
-      await user.save()
+      await User.save()
   
       return res.json(user)
     } catch (err) {
@@ -221,52 +219,43 @@ route.get('/user', async (req, res) => {
       return res.status(500).json({ error: 'Something went wrong' })
     }
   })
-  route.put('/post/:post_ID', async (req, res) => {
-    const { user_ID ,content , post_ID  } = req.body
+  route.put('/posts', async (req, res) => {
+    const { user_ID ,content , posts_ID  }=req.body
     try {
-      const post = await post.findOne({ where: { Post_ID } })
+      const post = await posts.findOne({where:{ posts_ID }})
   
-      post.user_ID = id
       post.content = content
       await post.save()
-  
-      return res.json(user)
-    } catch (err) {
-      console.log(err)
-      return res.status(500).json({ error: 'Something went wrong' })
+      return res.json(post)
+    } 
+    catch (err) {
+    console.log(err)
+    return res.status(500).json({ error: 'Something went wrong' })
     }
   })
-  route.put('/comment/:comment_ID', async (req, res) => {
-      const { user_ID , comment_content , comment_ID , post_ID  } = req.body
+  route.put('/comment', async (req, res) => {
+      const { user_ID , comment_content , comment_ID , posts_ID  } = req.body
     try {
-      const comment = await comment.findOne({ where: {  comment_ID} })
+      const comments = await comment.findOne({ where: {comment_ID} })
+      comments.comment_content = comment_content
+      await comments.save()
   
-     comment.user_ID = id
-     comment.comment_content = contant
-     comment.comment_ID = comment_id 
-     comment.post_ID = post_id  
-      await comment.save()
-  
-      return res.json(user)
+      return res.json(comments)
     } catch (err) {
       console.log(err)
       return res.status(500).json({ error: 'Something went wrong' })
     }
   })
 
-  route.put('/reaction/:reaction_ID', async (req, res) => {
-    const { user_ID, reaction_type , reaction_ID , post_ID  } = req.body
+  route.put('/reaction', async (req, res) => {
+    const { user_ID, reaction_type , reaction_ID , posts_ID  } = req.body
     try {
-      const reaction = await reaction.findOne({ where: { reaction_ID } })
-  
-     reaction.user_ID = user_ID
-     reaction.reaction_type = reaction_type 
-     reaction.reaction_ID = reaction_id 
-     reaction.post_ID = post_id  
-      await reaction.save()
-  
-      return res.json(user)
-    } catch (err) {
+      const Reaction = await reaction.findOne({ where: { reaction_ID } })
+      Reaction.reaction_type = reaction_type 
+      await Reaction.save()
+      return res.json(Reaction)
+    } 
+    catch (err) {
       console.log(err)
       return res.status(500).json({ error: 'Something went wrong' })
     }
@@ -275,9 +264,9 @@ route.get('/user', async (req, res) => {
 route.delete('/user/:user_ID', async (req, res) => {
   const user_ID = req.params.user_ID
   try {
-    const user = await User.findOne({ where: { User_ID } })
+    const User = await user.findOne({ where: { User_ID: user_ID } })
 
-    await user.destroy()
+    await User.destroy()
 
     return res.json({ message: 'User deleted!' })
   } catch (err) {
@@ -286,60 +275,47 @@ route.delete('/user/:user_ID', async (req, res) => {
   }
 })
 
-route.delete('/post/:post_ID', async (req, res) => {
-  const post_ID = req.params.post_ID
+route.delete('/posts/:posts_ID', async (req, res) => {
+  const posts_ID = req.params.posts_ID
   try {
-    const post = await post.findOne({ where: { post_ID } })
-
+    const post = await posts.findOne({ where: { posts_ID } })
     await post.destroy()
-
-    return res.json({ message: 'post deleted!' })
-  } catch (err) {
-    console.log(err)
-    return res.status(500).json({ error: 'Something went wrong' })
+    return res.json({ message: 'posts deleted!' })
+  } 
+  catch (err) {
+  console.log(err)
+  return res.status(500).json({ error: 'Something went wrong' })
   }
 })
 route.delete('/comment/:comment_ID', async (req, res) => {
   const comment_ID = req.params.comment_ID
   try {
-    const comment = await comment.findOne({ where: { comment_ID } })
-
-    await comment.destroy()
-
+    const Comment = await comment.findOne({ where: { comment_ID } })
+    await Comment.destroy()
     return res.json({ message: 'comment deleted!' })
-  } catch (err) {
-    console.log(err)
-    return res.status(500).json({ error: 'Something went wrong' })
+    } 
+  catch (err) {
+  console.log(err)
+  return res.status(500).json({ error: 'Something went wrong' })
   }
 })
 route.delete('/reaction/:reaction_ID', async (req, res) => {
   const reaction_ID = req.params.reaction_ID
   try {
-    const reaction = await reaction.findOne({ where: { reaction_ID } })
+    const Reaction = await reaction.findOne({ where: { reaction_ID } })
 
-    await reaction.destroy()
+    await Reaction.destroy()
 
     return res.json({ message: 'reaction deleted!' })
-  } catch (err) {
-    console.log(err)
-    return res.status(500).json({ error: 'Something went wrong' })
+  } 
+  catch (err) {
+  console.log(err)
+  return res.status(500).json({ error: 'Something went wrong' })
   }
 }) 
-route.delete('/friend/:friend_ID', async (req, res) => {
-    const friend_ID = req.params.friend_ID
-    try {
-      const friend = await friend.findOne({ where: { friend_ID } })
-  
-      await reaction.destroy()
-  
-      return res.json({ message: 'reaction deleted!' })
-    } catch (err) {
-      console.log(err)
-      return res.status(500).json({ error: 'Something went wrong' })
-    }
-  }) 
+
 route.listen({ port: 3000 }, async () => {
-    console.log('Server up on http://localhost:5000')
+    console.log('Server up on http://localhost:3000')
     await sequelize.authenticate()
     console.log('Database Connected!')
   })

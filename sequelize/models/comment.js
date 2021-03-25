@@ -8,9 +8,9 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ post,user }) {
+    static associate({ posts,user }) {
       // define association here
-      this.belongsTo(post)
+      this.belongsTo(posts)
       this.belongsTo(user)
                 
     }
@@ -21,14 +21,20 @@ module.exports = (sequelize, DataTypes) => {
   };
   comment.init({
     comment_ID: {type:DataTypes.INTEGER,
-      allowNull:false,
-      unique:true,
-      primaryKey:true,
+                 allowNull:false,
+                unique:true,
+                primaryKey:true,
+    },
+    post_ID:{ type:DataTypes.INTEGER,
+             allowNull:false,
+    },
+    userId: { type: DataTypes.INTEGER,
+             allowNull: false
     },
     comment_content: {type:DataTypes.STRING,
-      allowNull:false, 
-  }, 
-},
+            allowNull:false, 
+    }, 
+  },
     {
     sequelize,
     tableName:'comment',

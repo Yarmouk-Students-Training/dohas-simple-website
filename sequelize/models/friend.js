@@ -16,17 +16,16 @@ module.exports = (sequelize, DataTypes) => {
     } 
   };
   friend.init({
-    Friend_ID: {type:DataTypes.INTEGER,
-      allowNull:false,
-      unique:true,
-      primaryKey:true,
+     Friend_ID: {
+       type:DataTypes.INTEGER,
+       allowNull:false,
     },
-    
-  
-    status: {type:DataTypes.STRING,
+     User:{
+      type:DataTypes.INTEGER,
       allowNull:false,
     },
-    action_users_id: {type:DataTypes.STRING,
+    status: {
+      type:DataTypes.STRING,
       allowNull:false,
     },
   }, {

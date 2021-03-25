@@ -2,7 +2,7 @@
 const { Model} = require('sequelize');
 const reaction = require('./reaction');
 module.exports = (sequelize, DataTypes) => {
-  class post extends Model {
+  class posts extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -16,23 +16,27 @@ module.exports = (sequelize, DataTypes) => {
 
     }
     toJSON(){ 
-      return { ...this.get(), P_ID: undefined , U_ID: undefined }
+      return { ...this.get(), posts_ID: undefined }
     
     } 
   };
-  post.init({
-    Post_ID: {type:DataTypes.INTEGER,
+  posts.init({
+    posts_ID: {type:DataTypes.INTEGER,
       allowNull:false,
       unique: true,
       primaryKey: true
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
     content:{type:DataTypes.STRING,
       allowNull:false,
   },
   }, {
     sequelize,
-    tableName:'post',
-    modelName: 'post',
+    tableName:'posts',
+    modelName: 'posts',
   });
-  return post;
+  return posts;
 };
