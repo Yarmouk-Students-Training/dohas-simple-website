@@ -16,16 +16,7 @@ const route = express()
 route.use(express.json())
 dotenv.config()
 
-route.post('/api/user', verifyToken, (req, res) => {
-console.log("user created");
-
-});
-route.delete('/logout', (req, res) => {
-  refreshTokens = refreshTokens.filter(token => token !== req.body.token)
-  res.sendStatus(204)
-})
-
-route.post('/api/login', (req, res) => {
+route.post('/api/login', async(req, res) => {
   // Authenticate User
    const user = {
     id: 1, 
@@ -39,7 +30,7 @@ route.post('/api/login', (req, res) => {
 })
 
 function signAccessToken(user) {
-  return jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '15s' })
+  return jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '60s' })
 }
 
 route.listen({ port: 3000 }, async () => {

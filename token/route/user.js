@@ -7,16 +7,17 @@ const route = express.Router()
 route.use(express.json())
 
 route.post('/user', verifyToken, async (req, res) => {
-  
+  console.log(req.body)
     const  { user_name , email, user_ID ,gender ,password}=req.body
        try {
+         console.log(user_ID)
       console.log("hi user")
       const User = await user.create({user_name , email, User_ID: user_ID ,gender ,password })
-      return res.json(User)
+      return res.send(User)
     } 
     catch (err) {
     console.log(err)
-    return res.status(500).json(err)
+    return res.status(500).send(err)
     }
   
   })

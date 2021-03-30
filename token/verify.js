@@ -2,9 +2,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv')
 dotenv.config()
 
-/*function signAccessToken(userId){
-  return signToken(userId, "SECRET_KEY", '1h')
-}*/
+
 
 function verifyToken(req, res, next) {
     // Get auth header value
@@ -35,10 +33,8 @@ function verifyToken(req, res, next) {
     }
     
     } 
-    /*function signRefreshToken(userId){
-      return signToken(userId, "SECRET_KEY2", '60d')
-    }*/
-    
+   
+    //  fanction refreshToken
     async function reIssueTokens (refreshToken){
       const payload = await verifyRefreshToken(refreshToken);
       const userId = payload.aud;
